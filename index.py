@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, APIRouter
 from models.todo_model import TodoModel
 from schemas.todo_schema import Todo, TodoCreate
 from config.db import SessionLocal
@@ -6,6 +6,22 @@ from sqlalchemy.orm import Session
 
 
 app = FastAPI()
+
+
+item = APIRouter()
+user = APIRouter()
+
+@user.get('/user/')
+def get_user():
+    return {"Hello User"}
+
+@item.get('/item/')
+def get_item():
+    return {"Hello Guys, I am a Item..."}
+
+app.include_router(item, tags=['Items'], prefix='/newitem')
+app.include_router(user, tags=['User'], prefix='/newuser')
+
 
 def get_db():
     db = SessionLocal()
